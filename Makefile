@@ -26,15 +26,15 @@ build-all: build-testpmd build-mac build-listener
 
 .PHONY: build-testpmd # Build testpmd
 build-testpmd: testpmd-dependencies
-	@echo $(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
+	@$(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
 
 .PHONY: build-mac # Build mac
 build-mac:
-	@echo $(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
+	@$(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
 
 .PHONY: build-listener # Build listener
 build-listener:
-	@echo $(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
+	@$(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
 
 .PHONY: clean # Delete untracked changes
 clean:
@@ -45,12 +45,12 @@ push-all: push-testpmd push-mac push-listener
 
 .PHONY: push-testpmd # Push testpmd
 push-testpmd: build-testpmd
-	@echo $(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:push-%=%):$(TAG)"
+	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:push-%=%):$(TAG)"
 
 .PHONY: push-mac # Push mac
 push-mac: build-mac
-	@echo $(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/mac-container-app-$(@:push-%=%):$(TAG)"
+	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/mac-container-app-$(@:push-%=%):$(TAG)"
 
 .PHONY: push-listener # Push testpmd
 push-listener: build-listener
-	@echo $(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/listener-container-app-$(@:push-%=%):$(TAG)"
+	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/listener-container-app-$(@:push-%=%):$(TAG)"
