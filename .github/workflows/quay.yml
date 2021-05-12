@@ -1,0 +1,29 @@
+name: Quay
+
+on:
+  push:
+    branches:
+      - master
+      - test
+
+env:
+  REGISTRY: quay.io
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build quay image
+        run: |
+          org=${GITHUB_REPOSITORY%/*}
+          make build-all CONTAINER_CLI=docker ORG=${org}
+
+      - name: Log into registry
+        run: echo "${{ secrets.QUAY_TOKEN }}" | docker login ${REGISTRY} -u ${{ secrets.QUAY_USER }} --password-stdin
+
+      - name: Push image
+        run: |
+          org=${GITHUB_REPOSITORY%/*}
+          make push-all CONTAINER_CLI=docker ORG=${org}
