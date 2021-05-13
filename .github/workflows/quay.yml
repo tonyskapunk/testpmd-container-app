@@ -14,16 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Build quay image
-        run: |
-          org=${GITHUB_REPOSITORY%/*}
-          make --debug=b build-all CONTAINER_CLI=docker ORG=${org}
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Log into registry
         run: echo "${{ secrets.QUAY_TOKEN }}" | docker login ${REGISTRY} -u ${{ secrets.QUAY_USER }} --password-stdin
 
-      - name: Push image
+      - name: Build and Push images
         run: |
           org=${GITHUB_REPOSITORY%/*}
-          make --debug=b push-all CONTAINER_CLI=docker ORG=${org}
+          make all CONTAINER_CLI=docker ORG=${org}
