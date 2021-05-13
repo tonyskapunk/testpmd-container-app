@@ -1,3 +1,5 @@
+SHELL 			:= /bin/bash
+
 VERSION         ?= 0.2.2
 REGISTRY        ?= quay.io
 ORG             ?= rh-nfv-int
@@ -18,7 +20,7 @@ all: build-all push-all
 
 .PHONY: testpmd-dependencies # Get dependencies for testpmd
 testpmd-dependencies:
-	@if [ ! -d testpmd/testpmd-as-load-balancer ]; then \
+	@if [[ ! -d testpmd/testpmd-as-load-balancer ]]; then \
 	git clone $(TESTPMD_LB_REPO) testpmd/testpmd-as-load-balancer; \
 	fi
 
@@ -27,6 +29,7 @@ build-all: build-testpmd build-mac build-listener
 
 .PHONY: build-testpmd # Build testpmd
 build-testpmd: testpmd-dependencies
+	ls -l testpmd
 	@echo $(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
 
 .PHONY: build-mac # Build mac
