@@ -52,8 +52,8 @@ push-testpmd: build-testpmd
 
 .PHONY: push-mac # Push mac
 push-mac: build-mac
-	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/mac-container-app-$(@:push-%=%):$(TAG)"
+	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:push-%=%):$(TAG)"
 
 .PHONY: push-listener # Push testpmd
 push-listener: build-listener
-	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/listener-container-app-$(@:push-%=%):$(TAG)"
+	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:push-%=%):$(TAG)"

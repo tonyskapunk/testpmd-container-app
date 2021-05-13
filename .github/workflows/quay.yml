@@ -17,7 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Log into registry
+      - name: Registry login
         run: echo "${{ secrets.QUAY_TOKEN }}" | docker login ${REGISTRY} -u ${{ secrets.QUAY_USER }} --password-stdin
 
       - name: Build and Push images
