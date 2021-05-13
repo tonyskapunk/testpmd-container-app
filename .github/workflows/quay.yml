@@ -18,8 +18,7 @@ jobs:
       - name: Build quay image
         run: |
           org=${GITHUB_REPOSITORY%/*}
-          ls -lR
-          make -d build-all CONTAINER_CLI=docker ORG=${org}
+          make --debug=b build-all CONTAINER_CLI=docker ORG=${org}
 
       - name: Log into registry
         run: echo "${{ secrets.QUAY_TOKEN }}" | docker login ${REGISTRY} -u ${{ secrets.QUAY_USER }} --password-stdin
@@ -27,4 +26,4 @@ jobs:
       - name: Push image
         run: |
           org=${GITHUB_REPOSITORY%/*}
-          make -d push-all CONTAINER_CLI=docker ORG=${org}
+          make --debug=b push-all CONTAINER_CLI=docker ORG=${org}

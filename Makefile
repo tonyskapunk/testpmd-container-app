@@ -19,6 +19,7 @@ all: build-all push-all
 testpmd-dependencies:
 	@if [[ ! -d testpmd/testpmd-as-load-balancer ]]; then \
 	git clone https://github.com/krsacme/testpmd-as-load-balancer.git testpmd/testpmd-as-load-balancer; \
+	echo "=== Cloning testpmd-as-load-balancer ==="; \
 	fi
 
 .PHONY: build-all # Build ALL images
@@ -26,15 +27,16 @@ build-all: build-testpmd build-mac build-listener
 
 .PHONY: build-testpmd # Build testpmd
 build-testpmd: testpmd-dependencies
-	@$(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
+	ls -l testpmd
+	@echo $(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
 
 .PHONY: build-mac # Build mac
 build-mac:
-	@$(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
+	@echo $(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
 
 .PHONY: build-listener # Build listener
 build-listener:
-	@$(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
+	@echo $(CONTAINER_CLI) build $(@:build-%=%) -f $(@:build-%=%)/Dockerfile -t "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:build-%=%):$(TAG)" $(CONTAINER_ARGS)
 
 .PHONY: clean # Delete untracked changes
 clean:
@@ -45,12 +47,12 @@ push-all: push-testpmd push-mac push-listener
 
 .PHONY: push-testpmd # Push testpmd
 push-testpmd: build-testpmd
-	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:push-%=%):$(TAG)"
+	@echo $(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/testpmd-container-app-$(@:push-%=%):$(TAG)"
 
 .PHONY: push-mac # Push mac
 push-mac: build-mac
-	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/mac-container-app-$(@:push-%=%):$(TAG)"
+	@echo $(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/mac-container-app-$(@:push-%=%):$(TAG)"
 
 .PHONY: push-listener # Push testpmd
 push-listener: build-listener
-	@$(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/listener-container-app-$(@:push-%=%):$(TAG)"
+	@echo $(CONTAINER_CLI) push "$(REGISTRY)/$(ORG)/listener-container-app-$(@:push-%=%):$(TAG)"
