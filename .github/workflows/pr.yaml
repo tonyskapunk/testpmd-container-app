@@ -1,0 +1,54 @@
+name: Pull Request image
+
+on:
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+    inputs:
+      force_build:
+        description: "Force building images from PR"
+        required: true
+        default: false
+        type: boolean
+
+env:
+  REGISTRY: quay.io
+
+jobs:
+  validate-repo:
+    if: inputs.force_build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check current repo and incoming repo
+        run: |
+          echo PR: ${{ github.event.pull_request.head.repo.full_name }}
+          echo Repo: ${{ github.repository }}
+
+  pull-request-image:
+    # Build only when the PR comes from a branch in the same repo or forced
+    if: github.repository == github.event.pull_request.head.repo.full_name || inputs.force_build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check username
+        run: |
+          echo ${{ env.TEST_ENV }}
+
+      - name: Log in to Quay.io
+        uses: redhat-actions/podman-login@v1
+        with:
+          username: ${{ secrets.QUAY_USER }}
+          password: ${{ secrets.QUAY_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+
+      - name: Build and Push the images
+        run: |
+          ORG=${GITHUB_REPOSITORY%/*}
+          SHA=$(git rev-parse --short HEAD)
+          make all ORG=${ORG} TAG=${SHA}
